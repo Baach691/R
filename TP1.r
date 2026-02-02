@@ -1,6 +1,63 @@
+# ==============================================================================
+# 🧠 MÉMO RÉCAPITULATIF DES COMMANDES (TP1)
+# ==============================================================================
+#
+# --- 1. EXPLORATION DE DONNÉES ---
+# class(objet)      : Donne le type de l'objet (ex: "data.frame", "numeric").
+# View(df)          : Ouvre le tableau de données dans une nouvelle fenêtre.
+# dim(df)           : Affiche les dimensions (Lignes x Colonnes).
+# nrow(df)          : Affiche uniquement le nombre de lignes.
+# ncol(df)          : Affiche uniquement le nombre de colonnes.
+# colnames(df)      : Affiche les noms des colonnes.
+# summary(df)       : Résumé statistique rapide (Min, Max, Moyenne, Quartiles...).
+# head(df)          : Affiche les 6 premières lignes (utile pour un aperçu rapide).
+#
+# --- 2. SÉLECTION ET INDEXATION ---
+# df$colonne        : Sélectionne une colonne spécifique (ex: dfManga$Score).
+# df[L, C]          : Sélectionne par position [Lignes, Colonnes].
+#                     Ex: df[1:5, ]   -> Lignes 1 à 5, toutes les colonnes.
+#                     Ex: df[, c("A")] -> Toutes les lignes, colonne "A" uniquement.
+#
+# --- 3. STATISTIQUES DESCRIPTIVES ---
+# mean(vec)         : Calcule la moyenne.
+# median(vec)       : Calcule la médiane.
+# sd(vec)           : Calcule l'écart-type (standard deviation).
+# sum(vec)          : Calcule la somme totale des valeurs.
+# quantile(vec, probs=...) : Calcule les déciles/quartiles.
+#                     Ex: probs = seq(0.1, 0.9, 0.1) pour les déciles.
+# table(vec)        : Compte les effectifs pour chaque catégorie (tableau de contingence).
+# prop.table(table) : Transforme les effectifs en fréquences (pourcentages si *100).
+# length(obj)       : Donne la longueur d'un vecteur ou d'une liste.
+#
+# --- 4. MANIPULATION DE DATA FRAMES ---
+# subset(df, cond)  : Filtre le tableau selon une condition logique.
+#                     Ex: subset(df, Score > 8)
+# rbind(df1, df2)   : Fusionne deux tableaux verticalement (les colle l'un sous l'autre).
+#                     (Attention : les colonnes doivent avoir les mêmes noms !).
+#
+# --- 5. IMPORT / EXPORT ---
+# read.csv("f.csv") : Importe un fichier CSV.
+#                     Arguments clés : header=TRUE (noms colonnes), sep="," ou ";", dec=".".
+# write.table(df)   : Exporte un tableau en fichier CSV/Texte.
+#                     Arguments clés : row.names=FALSE (pas de numéro de ligne).
+#
+# --- 6. OPÉRATEURS LOGIQUES (Pour subset) ---
+# ==                : Égal à (Attention au double égal !).
+# !=                : Différent de.
+# > / >=            : Plus grand / Plus grand ou égal.
+# < / <=            : Plus petit / Plus petit ou égal.
+# &                 : ET (Les deux conditions doivent être vraies).
+# |                 : OU (Au moins une des deux conditions doit être vraie).
+# %in%              : DANS (Vérifie si la valeur est dans une liste).
+#                     Ex: Rating %in% c("A", "B") équivaut à (Rating == "A" | Rating == "B").
+# !                 : NON (Inverse la condition).
+#                     Ex: !Rating %in% c(...) -> Tout sauf ce qui est dans la liste.
+# ==============================================================================
+
+
 iris # Initie Iris
 class(iris) 
-View(Iris)
+View(iris)
 #View(iris) # Affiche la base de donnée Iris
 nrow(iris) #Nombre de lignes
 ncol(iris) #Nb de colonnes
@@ -25,10 +82,10 @@ quantile(iris$Petal.Width, probs = seq(from = 0.1, to = 0.9, by = 0.1)) # Affich
 
 
 #PARTIE 2
-dfManga = read.csv('/Users/bachir/Desktop/Cours/BUT/Semestre 2/R/TP/manga.csv',header = TRUE, sep =',',dec ='.')
+dfManga = read.csv('/Users/bachir/Desktop/Cours/BUT/Semestre 2/R/TP/TP1/manga.csv',header = TRUE, sep =',',dec ='.')
 class(dfManga)
 
-dfAnime = read.csv('/Users/bachir/Desktop/Cours/BUT/Semestre 2/R/TP/anime.csv',header = TRUE, sep =',',dec ='.')
+dfAnime = read.csv('/Users/bachir/Desktop/Cours/BUT/Semestre 2/R/TP/TP1/anime.csv',header = TRUE, sep =',',dec ='.')
 class(dfAnime)
 
 #View(dfManga)
@@ -50,8 +107,8 @@ quantile(dfManga$Score, probs = seq(from = 0.1, to = 0.9, by = 0.1)) #Affiche le
 quantile(dfAnime$Score, probs = seq(from = 0.1, to = 0.9, by = 0.1)) # Affiche les déciles des scores pour les animes. 1er décile à 6.910
 
 nrow(subset(dfManga, Score > 9)) # On en a 10
-nrow(subset(dfManga, Vote >= 20000)) # On en a 294
-nrow(subset(dfManga, Vote > 20000 & Score > 8 )) # On en a 186
+nrow(subset(dfManga, Vote >= 200000)) # On en a 12
+nrow(subset(dfManga, Vote > 200000 & Score >= 8 )) # On en a 11
 nrow(subset(dfManga, Score >= 7 & Score <= 8)) # On en a 8038
 
 effectifrating = table(dfAnime$Rating)
@@ -63,8 +120,9 @@ prop.table(effectifrating) # mm chose en prcentage
 nrow(subset(dfAnime, Rating == "R - 17+ (violence & profanity)")) # 1538
 nrow(subset(dfAnime, Rating == "R - 17+ (violence & profanity)" & Score > 8)) # 326
 nrow(subset(dfAnime, Rating != "R - 17+ (violence & profanity)")) # 8462
-nrow(subset(dfAnime, Rating == "PG - Children  " & Rating == "G - All Ages")) #0
-nrow(subset(dfAnime, Score >= 9 & Vote >= 40000)) # 24
+nrow(subset(dfAnime, Rating %in% c("PG - Children","G - All Ages"))) # 1510
+nrow(subset(dfAnime, Rating != "PG - Children" & Rating != "G - All Ages")) # 9050
+nrow(subset(dfAnime, Score >= 9 | Vote >= 400000)) # 496
 
 dfMangaTest = dfManga[,c("Title","Score","Vote","Ranked")]
 dfAnimeTest = dfAnime[,c("Title","Score","Vote","Ranked")]
@@ -74,7 +132,7 @@ dfMangaTest$Type = "Manga"
 
 dfConcat = rbind(dfAnimeTest,dfMangaTest)
 
-write.table(dfConcat, file = "ExportTP1.csv", sep = ",", row.names = FALSE)
+write.table(dfConcat, file = "ExportTP1.csv", sep = ";", row.names = FALSE)
 
 
 
